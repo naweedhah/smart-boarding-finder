@@ -24,6 +24,8 @@ app.use("/api/chats", chatRoute);
 app.use("/api/messages", messageRoute);
 app.use("/api/inquiry", require("./features/inquiry/inquiry.route"));
 app.use("/api/report", require("./features/report/report.route"));
+app.use("/api/sakith-chat", require("./features/sakithChat/sakithChat.route"));
+
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}!`);
