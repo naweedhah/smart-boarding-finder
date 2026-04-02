@@ -12,3 +12,7 @@ exports.createReport = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+exports.reviewReport = async (req, res) => {
+  res.json({ message: "Report reviewed" });
+};
