@@ -16,3 +16,21 @@ exports.createReport = async (req, res) => {
 exports.reviewReport = async (req, res) => {
   res.json({ message: "Report reviewed" });
 };
+
+
+let reports = [];
+
+exports.createReport = (req, res) => {
+  const { targetId, reason } = req.body;
+
+  const report = {
+    id: Date.now().toString(),
+    targetId,
+    reason,
+    status: "pending"
+  };
+
+  reports.push(report);
+
+  res.json(report);
+};
