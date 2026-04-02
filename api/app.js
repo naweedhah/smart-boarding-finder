@@ -22,6 +22,7 @@ app.use("/api/posts", postRoute);
 app.use("/api/test", testRoute);
 app.use("/api/chats", chatRoute);
 app.use("/api/messages", messageRoute);
+app.use("/api/inquiry", require("./features/inquiry/inquiry.route"));
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}!`);
