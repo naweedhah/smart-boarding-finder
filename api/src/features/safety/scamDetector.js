@@ -12,4 +12,4 @@ const detectScam = (text) => {
   return "safe";
 };
 
-module.exports = detectScam;
+export default detectScam;
