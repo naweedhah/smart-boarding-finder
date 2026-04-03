@@ -1,17 +1,19 @@
+import "../styles/sakith.css";
+
 import { createReport } from "../services/sakithService";
 
 export default function ReportButton({ chatId }) {
-  const report = async () => {
+  const handleReport = async () => {
     await createReport({
       targetId: chatId,
-      reason: "scam message"
+      reason: "suspicious message"
     });
 
-    alert("Reported");
+    alert("Reported successfully");
   };
 
   return (
-    <button style={{ background: "var(--error)", color: "#fff" }}>
+    <button className="btn btn-danger mt-1" onClick={handleReport}>
       Report
     </button>
   );

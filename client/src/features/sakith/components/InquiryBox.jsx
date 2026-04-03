@@ -1,29 +1,36 @@
 import { useState } from "react";
 import { createInquiry, acceptInquiry } from "../services/sakithService";
+import "../styles/sakith.css";
 
 export default function InquiryBox() {
-  const [id, setId] = useState("");
+  const [inquiryId, setInquiryId] = useState("");
 
-  const create = async () => {
+  const handleCreate = async () => {
     const res = await createInquiry({
       postId: "post1",
       ownerId: "owner1",
       type: "view"
     });
-    setId(res.data.id);
-    alert("Inquiry Created");
+
+    setInquiryId(res.data.id);
   };
 
-  const accept = async () => {
-    const res = await acceptInquiry(id);
-    alert("Chat Created: " + res.data.chat.id);
+  const handleAccept = async () => {
+    await acceptInquiry(inquiryId);
+    alert("Inquiry Accepted → Chat Enabled");
   };
 
   return (
     <div className="card">
-      <h3>Inquiry</h3>
-      <button className="btn-primary" onClick={create}>Create</button>
-      <button className="btn-teal" onClick={accept}>Accept</button>
+      <h2>Inquiry System</h2>
+
+      <button className="btn btn-primary mt-2" onClick={handleCreate}>
+        Create Inquiry
+      </button>
+
+      <button className="btn btn-teal mt-2" onClick={handleAccept}>
+        Accept Inquiry
+      </button>
     </div>
   );
 }

@@ -1,10 +1,12 @@
+import "../styles/sakith.css";
+
 export default function ScamWarning({ text }) {
   if (!text) return null;
 
-  const t = text.toLowerCase();
+  const msg = text.toLowerCase();
 
-  if (t.includes("advance payment") || t.includes("send money")) {
-    return <p style={{ color: "var(--error)" }}>⚠️ Scam Warning</p>;
+  if (msg.includes("send money") || msg.includes("advance payment")) {
+    return <p className="warning">⚠️ Scam Warning</p>;
   }
 
   return null;
