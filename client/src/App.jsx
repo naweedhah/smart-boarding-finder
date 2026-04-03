@@ -17,6 +17,9 @@ import {
 } from "./lib/loaders";
 import WatchlistPage from "./features/watchlist/pages/watchlistPage";
 import RoommatePage from "./features/roommate/pages/roommatePage";
+import InquiryBox from "./features/sakith/components/InquiryBox";
+import AdminDashboard from "./features/sakith/pages/AdminDashboard";
+
 
 function App() {
   const router = createBrowserRouter([
@@ -76,6 +79,14 @@ function App() {
           path: "/add",
           element: <NewPostPage />,
         },
+          {
+          path: "/sakith/inquiry",
+          element: <InquiryBox />
+         },
+        {
+           path: "/sakith/admin",
+          element: <AdminDashboard />
+        }
       ],
     },
   ]);
