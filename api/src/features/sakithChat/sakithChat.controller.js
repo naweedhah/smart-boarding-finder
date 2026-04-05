@@ -106,12 +106,16 @@ export const getMessages = async (req, res) => {
 
   try {
     const chat = await prisma.chat.findFirst({
-      where: {
-        id: chatId,
-        userIDs: {
-          hasSome: [req.userId],
-        },
-      },
+      where: req.userRole === "admin"
+        ? {
+            id: chatId,
+          }
+        : {
+            id: chatId,
+            userIDs: {
+              hasSome: [req.userId],
+            },
+          },
     });
 
     if (!chat) {

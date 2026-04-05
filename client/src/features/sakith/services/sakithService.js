@@ -24,6 +24,9 @@ export const getAdminOverview = () =>
 export const resolveReport = (id, data = {}) =>
   apiRequest.patch(`/report/${id}`, data);
 
+export const setReportedUserState = (reportId, isActive, adminNotes) =>
+  apiRequest.post("/report/user-state", { reportId, isActive, adminNotes });
+
 export const warnUser = (reportId) =>
   apiRequest.post("/report/warn", { reportId });
 

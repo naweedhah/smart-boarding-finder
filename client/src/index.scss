@@ -4,6 +4,11 @@
   box-sizing: border-box;
 }
 
+html,
+#root {
+  min-height: 100%;
+}
+
 a {
   text-decoration: none;
   color: inherit;
@@ -11,5 +16,7 @@ a {
 
 body{
   font-family: "Lato", sans-serif;
-  overflow: hidden;
+  min-height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
 }

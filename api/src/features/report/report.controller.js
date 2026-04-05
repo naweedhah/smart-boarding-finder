@@ -32,6 +32,23 @@ const reportInclude = {
   },
 };
 
+const getTargetUserProfile = async (targetUserId) => {
+  if (!targetUserId) return null;
+
+  return prisma.user.findUnique({
+    where: { id: targetUserId },
+    select: {
+      id: true,
+      username: true,
+      fullName: true,
+      avatar: true,
+      role: true,
+      isActive: true,
+      isVerified: true,
+    },
+  });
+};
+
 const validTargetTypes = new Set(["user", "boarding", "bookingRequest", "message"]);
 const isProduction = process.env.NODE_ENV === "production";
 
@@ -200,13 +217,15 @@ export const getReports = async (req, res) => {
     const reportsWithContext = await Promise.all(
       reports.map(async (report) => {
         const targetUserId = await resolveReportedUserId(report);
-        const reputation = targetUserId
-          ? await getUserReportSummary(targetUserId)
-          : null;
+        const [reputation, targetUser] = await Promise.all([
+          targetUserId ? getUserReportSummary(targetUserId) : Promise.resolve(null),
+          getTargetUserProfile(targetUserId),
+        ]);
 
         return {
           ...report,
           targetUserId,
+          targetUser,
           reputation,
         };
       }),
@@ -432,5 +451,88 @@ export const resolveReport = async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Failed to resolve report" });
+  }
+};
+
+export const setReportedUserActiveState = async (req, res) => {
+  const { reportId, isActive, adminNotes } = req.body;
+
+  if (!requireAdmin(req, res)) {
+    return;
+  }
+
+  if (!reportId || typeof isActive !== "boolean") {
+    return res.status(400).json({ message: "Report id and active state are required" });
+  }
+
+  try {
+    const report = await prisma.report.findUnique({
+      where: { id: reportId },
+      include: reportInclude,
+    });
+
+    if (!report) {
+      return res.status(404).json({ message: "Report not found" });
+    }
+
+    const targetUserId = await resolveReportedUserId(report);
+
+    if (!targetUserId) {
+      return res.status(400).json({ message: "Could not determine which user to update" });
+    }
+
+    const [updatedUser, updatedReport] = await Promise.all([
+      prisma.user.update({
+        where: { id: targetUserId },
+        data: { isActive },
+        select: {
+          id: true,
+          username: true,
+          fullName: true,
+          avatar: true,
+          role: true,
+          isActive: true,
+          isVerified: true,
+        },
+      }),
+      prisma.report.update({
+        where: { id: reportId },
+        data: {
+          status: isActive ? "underReview" : "resolved",
+          adminNotes:
+            adminNotes?.trim() ||
+            (isActive
+              ? "User account restored by admin review."
+              : "User account suspended by admin review."),
+          ...(isActive ? {} : { resolvedAt: new Date() }),
+        },
+        include: reportInclude,
+      }),
+    ]);
+
+    await createNotification({
+      userId: targetUserId,
+      type: "safetyAlert",
+      title: isActive ? "Account access restored" : "Account suspended",
+      message: isActive
+        ? "An admin reviewed your case and restored account access."
+        : `An admin reviewed a report and suspended your account related to: ${report.reason}.`,
+      metadata: {
+        reportId,
+        targetType: report.targetType,
+        targetId: report.targetId,
+        isActive,
+      },
+      bypassPreference: true,
+    });
+
+    res.status(200).json({
+      message: isActive ? "User account restored" : "User account suspended",
+      report: updatedReport,
+      targetUser: updatedUser,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Failed to update user account state" });
   }
 };

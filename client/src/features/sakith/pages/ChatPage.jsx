@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { format } from "timeago.js";
 import { useParams } from "react-router-dom";
 import ScamWarning from "../components/ScamWarning";
@@ -8,14 +8,17 @@ import {
   sendChatMessage,
 } from "../services/sakithService";
 import "../styles/sakith.css";
+import { AuthContext } from "../../../context/AuthContext";
 
 export default function ChatPage() {
   const { chatId } = useParams();
+  const { currentUser } = useContext(AuthContext);
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [isSending, setIsSending] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const isAdminViewer = currentUser?.role === "admin";
 
   useEffect(() => {
     const loadMessages = async () => {
@@ -81,28 +84,34 @@ export default function ChatPage() {
                   <p>{msg.text}</p>
                   <span className="text-muted">{format(msg.createdAt)}</span>
                   <ScamWarning text={msg.text} scamFlag={msg.scamFlag} />
-                  <ReportButton messageId={msg.id} />
+                  {!isAdminViewer && <ReportButton messageId={msg.id} />}
                 </div>
               ))
             )}
           </div>
 
-          <div className="flex mt-2 chat-input-row">
-            <input
-              className="input"
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-              placeholder="Type a message..."
-            />
+          {isAdminViewer ? (
+            <p className="text-muted">
+              Admin review mode: you can inspect this conversation, but only the student and owner can send messages.
+            </p>
+          ) : (
+            <div className="flex mt-2 chat-input-row">
+              <input
+                className="input"
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+                placeholder="Type a message..."
+              />
 
-            <button
-              className="btn btn-primary ml-2"
-              onClick={handleSendMessage}
-              disabled={isSending}
-            >
-              {isSending ? "Sending..." : "Send"}
-            </button>
-          </div>
+              <button
+                className="btn btn-primary ml-2"
+                onClick={handleSendMessage}
+                disabled={isSending}
+              >
+                {isSending ? "Sending..." : "Send"}
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

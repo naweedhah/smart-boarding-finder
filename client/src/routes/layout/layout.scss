@@ -1,7 +1,7 @@
 @import "../../responsive.scss";
 
 .layout {
-  height: 100vh;
+  min-height: 100vh;
   width: 100%;
   padding-left: 20px;
   padding-right: 0;
@@ -9,7 +9,7 @@
   flex-direction: column;
 
   .content {
-    // flex: 1;
-    height: calc(100vh - 100px);
+    flex: 1;
+    min-height: 0;
   }
 }

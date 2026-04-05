@@ -276,6 +276,99 @@ h1, h2, h3 {
   align-items: flex-start;
 }
 
+.inquiry-item > * {
+  min-width: 0;
+}
+
+.inquiry-item p,
+.inquiry-item strong,
+.inquiry-item a,
+.inquiry-item small,
+.inquiry-item span {
+  overflow-wrap: anywhere;
+}
+
+.report-proof-image {
+  display: block;
+  width: 220px;
+  max-width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.report-evidence-card {
+  margin-top: 14px;
+  padding: 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: #fcf5f3;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.report-evidence-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.report-evidence-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.report-evidence-block {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.report-evidence-label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.report-proof-link {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 10px;
+  width: fit-content;
+  font-weight: 600;
+}
+
+.admin-note-block {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.admin-note-input {
+  width: 100%;
+  min-height: 88px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  resize: vertical;
+  font: inherit;
+  color: var(--text-main);
+  background: var(--white);
+}
+
+.admin-note-input:focus {
+  outline: none;
+  border-color: var(--teal);
+}
+
 .info-panel {
   padding: 16px;
   border: 1px solid var(--border);
@@ -304,8 +397,50 @@ h1, h2, h3 {
 .ml-2 { margin-left: 8px; }
 
 @media (max-width: 768px) {
+  .sakith-page {
+    padding: 24px 12px 48px;
+  }
+
+  .card,
+  .admin-summary-card {
+    padding: 16px;
+  }
+
+  .header-row {
+    align-items: stretch;
+  }
+
+  .header-row .btn {
+    width: 100%;
+  }
+
+  .admin-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-summary-card strong {
+    font-size: 28px;
+  }
+
   .inquiry-item {
     flex-direction: column;
+    gap: 16px;
+  }
+
+  .report-evidence-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .action-row {
+    width: 100%;
+  }
+
+  .action-row > * {
+    flex: 1 1 100%;
+  }
+
+  .btn {
+    width: 100%;
   }
 
   .chat-input-row {
