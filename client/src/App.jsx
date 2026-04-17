@@ -21,6 +21,8 @@ import InquiryBox from "./features/sakith/components/InquiryBox";
 import AdminDashboard from "./features/sakith/pages/AdminDashboard";
 import ChatPage from "./features/sakith/pages/ChatPage";
 
+// 🚨 Your new import added here!
+import BoardingFinder from "./features/aaqib/BoardingFinder";
 
 function App() {
   const router = createBrowserRouter([
@@ -42,7 +44,6 @@ function App() {
           element: <SinglePage />,
           loader: singlePageLoader,
         },
-
         {
           path: "/login",
           element: <Login />,
@@ -80,17 +81,22 @@ function App() {
           path: "/add",
           element: <NewPostPage />,
         },
-          {
+        {
           path: "/sakith/inquiry",
           element: <InquiryBox />
-         },
+        },
         {
-           path: "/sakith/admin",
+          path: "/sakith/admin",
           element: <AdminDashboard />
         },
         {
           path: "/sakith/chat/:chatId",
           element: <ChatPage />
+        },
+        // 🚨 Your new route added here!
+        {
+          path: "/boardings",
+          element: <BoardingFinder />
         }
       ],
     },

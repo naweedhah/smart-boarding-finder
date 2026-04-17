@@ -13,6 +13,8 @@ import inquiryRoute from "./src/features/inquiry/inquiry.route.js";
 import reportRoute from "./src/features/report/report.route.js";
 import sakithChatRoute from "./src/features/sakithChat/sakithChat.route.js";
 import { initSocketServer } from "./src/shared/lib/socket.js";
+import boardingRoutes from './routes/boardingRoutes.js';
+
 
 const app = express();
 const port = process.env.PORT || 8800;
@@ -31,6 +33,7 @@ app.use("/api/messages", messageRoute);
 app.use("/api/inquiry", inquiryRoute);
 app.use("/api/report", reportRoute);
 app.use("/api/sakith-chat", sakithChatRoute);
+app.use('/api/boardings', boardingRoutes);
 
 initSocketServer(server, process.env.CLIENT_URL);
 
