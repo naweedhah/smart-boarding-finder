@@ -71,7 +71,7 @@ router.post('/verify-image', upload.single('image'), async (req, res) => {
 // --- 3. Add New Boarding (Prisma Mapped) ---
 router.post('/add', upload.array('images', 5), async (req, res) => {
     try {
-        const { ownerId, title, description, price, location, genderAllowed, facilities } = req.body;
+        const { ownerId, title, description, price, location, genderAllowed, facilities, capacity } = req.body;
         const imagePaths = req.files ? req.files.map(file => file.path) : [];
 
         let mappedGender = 'any';
@@ -100,7 +100,7 @@ router.post('/add', upload.array('images', 5), async (req, res) => {
                 latitude: "0.0",
                 longitude: "0.0",
                 boardingType: "singleRoom",
-                capacity: 1,
+                capacity: parseInt(capacity) || 1,
                 status: "available",
                 postDetail: {
                     create: {
@@ -135,6 +135,7 @@ router.get('/', async (req, res) => {
             location: post.address,
             genderAllowed: post.preferredTenantGender,
             status: post.status === 'available' ? 'Available' : 'Full',
+            capacity: post.capacity,
             images: post.images
         }));
 
@@ -268,7 +269,7 @@ router.delete('/:id', async (req, res) => {
 // --- 9. UPDATE a boarding listing ---
 router.put('/:id', upload.array('images', 5), async (req, res) => {
   try {
-    const { title, description, price, location, genderAllowed, features } = req.body;
+    const { title, description, price, location, genderAllowed, features, capacity } = req.body;
     const postId = req.params.id;
     
     const updateData = {};
@@ -276,6 +277,7 @@ router.put('/:id', upload.array('images', 5), async (req, res) => {
     if (price) updateData.rent = parseInt(price);
     if (location) updateData.address = location;
     if (genderAllowed) updateData.preferredTenantGender = genderAllowed.toLowerCase() === 'any' ? 'any' : genderAllowed.toLowerCase();
+    if (capacity) updateData.capacity = parseInt(capacity);
     
     if (req.files && req.files.length > 0) {
         updateData.images = req.files.map(file => file.path);

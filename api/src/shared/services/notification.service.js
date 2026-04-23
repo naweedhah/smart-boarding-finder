@@ -49,19 +49,10 @@ const normalizeChannel = (channel, preferences) => {
 };
 
 export const getOrCreateNotificationPreference = async (userId) => {
-  const existing = await prisma.notificationPreference.findUnique({
+  return prisma.notificationPreference.upsert({
     where: { userId },
-  });
-
-  if (existing) {
-    return existing;
-  }
-
-  return prisma.notificationPreference.create({
-    data: {
-      userId,
-      ...DEFAULT_NOTIFICATION_PREFERENCES,
-    },
+    create: { userId, ...DEFAULT_NOTIFICATION_PREFERENCES },
+    update: {},
   });
 };
 

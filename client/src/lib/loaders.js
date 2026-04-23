@@ -16,10 +16,14 @@ export const listPageLoader = async ({ request }) => {
 };
 
 export const profilePageLoader = async () => {
-  const postPromise = apiRequest("/users/profilePosts");
-  const chatPromise = apiRequest("/chats");
-  const searchAlertPromise = apiRequest("/users/watchlists/searches");
-  const preferencePromise = apiRequest("/users/notifications/preferences");
+  const postPromise = apiRequest("/users/profilePosts")
+    .catch(() => ({ data: { userPosts: [], savedPosts: [], pendingBookings: [] } }));
+  const chatPromise = apiRequest("/chats")
+    .catch(() => ({ data: [] }));
+  const searchAlertPromise = apiRequest("/users/watchlists/searches")
+    .catch(() => ({ data: [] }));
+  const preferencePromise = apiRequest("/users/notifications/preferences")
+    .catch(() => ({ data: null }));
   return defer({
     postResponse: postPromise,
     chatResponse: chatPromise,

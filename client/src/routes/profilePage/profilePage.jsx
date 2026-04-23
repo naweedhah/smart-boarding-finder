@@ -9,7 +9,7 @@ import { useNotificationStore } from "../../lib/notificationStore";
 
 const getDashboardPath = (role) => {
   if (role === "admin") return "/sakith/admin";
-  if (role === "boardingOwner") return "/sakith/inquiry";
+  if (role === "boardingOwner") return "/boardings";
   return "/profile";
 };
 

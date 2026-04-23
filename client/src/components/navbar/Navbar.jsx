@@ -7,7 +7,7 @@ import { SocketContext } from "../../context/SocketContext";
 
 const getDashboardPath = (role) => {
   if (role === "admin") return "/sakith/admin";
-  if (role === "boardingOwner") return "/sakith/inquiry";
+  if (role === "boardingOwner") return "/boardings";
   return "/profile";
 };
 
@@ -86,7 +86,7 @@ function Navbar() {
       console.log(err);
     }
     setAlertsOpen(false);
-    navigate("/profile#notifications");
+    navigate(dashboardPath + "#notifications");
   };
 
   const handleMarkAllRead = async () => {
